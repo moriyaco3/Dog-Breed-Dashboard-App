@@ -1,2 +1,2 @@
-# App
+# Dog Breed Dashboard App
 
