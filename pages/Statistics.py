@@ -100,33 +100,6 @@ ax.set_facecolor("none")
 
 st.pyplot(fig, use_container_width=False)
 
-fig, ax = plt.subplots(figsize=(6, 3))
-
-sns.histplot(
-    df["life_avg"].dropna(),
-    bins=10,
-    ax=ax,
-    color="#f4a261"
-)
-
-ax.xaxis.label.set_color("white")
-ax.yaxis.label.set_color("white")
-ax.set_title("Distribution of Average Life Span (years)", color="white", fontsize=12)
-ax.set_xlabel("")
-ax.set_ylabel("Number of Breeds")
-ax.tick_params(colors="white")
-
-ax.spines["top"].set_visible(False)
-ax.spines["right"].set_visible(False)
-ax.spines["left"].set_color("#666666")
-ax.spines["bottom"].set_color("#666666")
-
-fig.patch.set_alpha(0)
-ax.set_facecolor("none")
-
-st.pyplot(fig, use_container_width=False)
-
-
 # Average Weight per Breed Group – Male vs Female
 
 def get_metric_weight(w):
