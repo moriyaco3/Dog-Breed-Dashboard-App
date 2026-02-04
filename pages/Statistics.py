@@ -73,28 +73,23 @@ df["life_min"], df["life_max"] = zip(
 )
 
 df["life_avg"] = (df["life_min"] + df["life_max"]) / 2
-avg_life_df = (
-    df.dropna(subset=["breed_group", "life_avg"])
-    .groupby("breed_group", as_index=False)["life_avg"]
-    .mean()
-    .sort_values("life_avg", ascending=False).round(1)
-)
 
-fig, ax = plt.subplots(figsize=(6, 3))
 
-sns.barplot(
-    data=avg_life_df,
+fig, ax = plt.subplots(figsize=(7, 4))
+
+sns.boxplot(
+    data=df.dropna(subset=["breed_group", "life_avg"]),
     x="life_avg",
     y="breed_group",
     ax=ax,
-    color="#90be6d"
+    color="#b8e1dd"
 )
 
-ax.set_title("Average Life Span per Group (years)", color="white", fontsize=12)
+ax.set_title("Life Span Distribution by Breed Group (years)", color="white", fontsize=12)
 ax.set_xlabel("")
 ax.set_ylabel("")
-ax.tick_params(colors="white")
 
+ax.tick_params(colors="white")
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
 ax.spines["left"].set_color("#666666")
@@ -135,6 +130,11 @@ weight_group = (
     .groupby("breed_group", as_index=False)
     .mean()
     .round(1)
+)
+
+weight_group = weight_group.sort_values(
+    by=["male_avg_kg", "female_avg_kg"],
+    ascending=False
 )
 
 fig, ax = plt.subplots(figsize=(6, 3))
@@ -234,6 +234,11 @@ height_group = (
     .groupby("breed_group", as_index=False)
     .mean()
     .round(1)
+)
+
+height_group = height_group.sort_values(
+    by=["h_male_avg_cm", "h_female_avg_cm"],
+    ascending=False
 )
 
 fig, ax = plt.subplots(figsize=(6, 3))
