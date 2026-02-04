@@ -109,13 +109,13 @@ st.pyplot(fig, use_container_width=False)
 # Average Weight per Breed Group – Male vs Female #
 ###################################################
 
-def get_metric_weight(w):
+def get_metric(w):
     if isinstance(w, dict):
         return w.get("metric")
     return None
 
 
-df["weight_kg"] = df["weight"].apply(get_metric_weight)
+df["weight_kg"] = df["weight"].apply(get_metric)
 
 # extract "min-max" ranges for each sex
 df["male_range"] = df["weight_kg"].str.extract(r"Male:\s*([\d\.]+-[\d\.]+)")
@@ -174,6 +174,137 @@ ax.set_facecolor("none")
 
 st.pyplot(fig, use_container_width=False)
 
+#################################
+# Scatter: Weight vs Life Span  #
+#################################
+
+df["avg_weight_kg"] = df[["male_avg_kg", "female_avg_kg"]].mean(axis=1)
+
+scatter_df = df.dropna(subset=["avg_weight_kg", "life_avg"])
+
+fig, ax = plt.subplots(figsize=(6, 3))
+
+sns.regplot(
+    data=scatter_df,
+    x="avg_weight_kg",
+    y="life_avg",
+    ax=ax,
+    scatter_kws={"alpha": 0.6, "color": "#4ea8de"},
+    line_kws={"color": "white"}
+)
+
+ax.set_title("Weight vs Life Span", color="white", fontsize=12)
+ax.set_xlabel("Average Weight (kg)")
+ax.set_ylabel("Average Life Span (years)")
+
+ax.tick_params(colors="white")
+ax.xaxis.label.set_color("white")
+ax.yaxis.label.set_color("white")
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+ax.spines["left"].set_color("#666666")
+ax.spines["bottom"].set_color("#666666")
+
+fig.patch.set_alpha(0)
+ax.set_facecolor("none")
+
+st.pyplot(fig, use_container_width=False)
+
+#############################################
+# Average Height per Breed Group – Male vs Female #
+#############################################
+
+df["height_cm"] = df["height"].apply(get_metric)
+
+# extract "min-max" ranges for each sex
+df["h_male_range"] = df["height_cm"].str.extract(r"Male:\s*([\d\.]+-[\d\.]+)")
+df["h_female_range"] = df["height_cm"].str.extract(r"Female:\s*([\d\.]+-[\d\.]+)")
+
+# use the split_range function
+df["h_male_min"], df["h_male_max"] = zip(*df["h_male_range"].apply(split_range))
+df["h_female_min"], df["h_female_max"] = zip(*df["h_female_range"].apply(split_range))
+
+# averages
+df["h_male_avg_cm"] = (df["h_male_min"] + df["h_male_max"]) / 2
+df["h_female_avg_cm"] = (df["h_female_min"] + df["h_female_max"]) / 2
+
+height_group = (
+    df[["breed_group", "h_male_avg_cm", "h_female_avg_cm"]]
+    .dropna(subset=["breed_group"])
+    .groupby("breed_group", as_index=False)
+    .mean()
+    .round(1)
+)
+
+fig, ax = plt.subplots(figsize=(6, 3))
+
+y = range(len(height_group))
+
+ax.barh(
+    y,
+    height_group["h_male_avg_cm"],
+    height=0.4,
+    label="Male",
+    color="#4ea8de"
+)
+
+ax.barh(
+    [i + 0.4 for i in y],
+    height_group["h_female_avg_cm"],
+    height=0.4,
+    label="Female",
+    color="#f28482"
+)
+
+ax.set_yticks([i + 0.2 for i in y])
+ax.set_yticklabels(height_group["breed_group"], color="white")
+
+ax.set_title("Average Height per Breed Group (cm)", color="white", fontsize=12)
+ax.legend()
+
+ax.tick_params(colors="white")
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+ax.spines["left"].set_color("#666666")
+ax.spines["bottom"].set_color("#666666")
+
+fig.patch.set_alpha(0)
+ax.set_facecolor("none")
+
+st.pyplot(fig, use_container_width=False)
+
+#################################
+# Scatter: Height vs Life Span  #
+#################################
+df["height_avg_cm"] = df[["h_male_avg_cm", "h_female_avg_cm"]].mean(axis=1)
+
+scatter_df2 = df.dropna(subset=["height_avg_cm", "life_avg"])
+
+fig, ax = plt.subplots(figsize=(6, 4))
+
+sns.regplot(
+    data=scatter_df2,
+    x="height_avg_cm",
+    y="life_avg",
+    ax=ax,
+    scatter_kws={"alpha": 0.6, "color": "#90dbf4"},
+    line_kws={"color": "white"}
+)
+
+ax.set_title("Height vs Life Span", color="white", fontsize=12)
+ax.set_xlabel("Average Height (cm)", color="white")
+ax.set_ylabel("Average Life Span (years)", color="white")
+
+ax.tick_params(colors="white")
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+ax.spines["left"].set_color("#666666")
+ax.spines["bottom"].set_color("#666666")
+
+fig.patch.set_alpha(0)
+ax.set_facecolor("none")
+
+st.pyplot(fig, use_container_width=False)
 
 ######################################
 # Show breeds by a temperament trait #
@@ -206,7 +337,7 @@ trait = st.selectbox(
     options=unique_traits,
     label_visibility="collapsed"
 )
--
+
 temp = df[["breed_group", "temperament"]].dropna(subset=["breed_group", "temperament"]).copy()
 
 # per breed: does temperament contain this trait?
