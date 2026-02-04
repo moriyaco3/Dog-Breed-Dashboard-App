@@ -4,6 +4,8 @@ An interactive data exploration app for dog breeds, built with **Python** and **
 
 The app is designed for people who are interested in dogs and want to compare breeds based on size, life span, temperament, and other characteristics — especially useful for people looking to choose a dog.
 
+Used API:
+https://thedogapi.com/en
 ---
 
 ## Project Description
@@ -20,6 +22,10 @@ The focus is on making the data easy to understand and useful for real-world dec
 
 ---
 
-## 🚀 How to run the Project
+## How to Use the Project
 
-#streamlit run main.py
+### Run the app locally
+
+streamlit run main.py
+
+## Public URL
