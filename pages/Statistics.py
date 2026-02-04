@@ -75,7 +75,7 @@ df["life_min"], df["life_max"] = zip(
 df["life_avg"] = (df["life_min"] + df["life_max"]) / 2
 
 
-fig, ax = plt.subplots(figsize=(7, 4))
+fig, ax = plt.subplots(figsize=(6, 3))
 
 sns.boxplot(
     data=df.dropna(subset=["breed_group", "life_avg"]),
@@ -113,6 +113,7 @@ def get_metric(w):
 df["weight_kg"] = df["weight"].apply(get_metric)
 
 # extract "min-max" ranges for each sex
+
 df["male_range"] = df["weight_kg"].str.extract(r"Male:\s*([\d\.]+-[\d\.]+)")
 df["female_range"] = df["weight_kg"].str.extract(r"Female:\s*([\d\.]+-[\d\.]+)")
 
@@ -293,7 +294,8 @@ sns.regplot(
     y="life_avg",
     ax=ax,
     scatter_kws={"alpha": 0.6, "color": "#90dbf4"},
-    line_kws={"color": "white"}
+    line_kws={"color": "white"},
+    fit_reg=False
 )
 
 ax.set_title("Height vs Life Span", color="white", fontsize=12)
