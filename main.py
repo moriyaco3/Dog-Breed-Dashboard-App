@@ -102,11 +102,7 @@ def show_details(breed):
     st.write("Description:", breed.get("description"))
 
 
-try:
-    breeds = get_breeds()
-except Exception:
-    st.error("Failed to load data from TheDogAPI")
-    st.stop()
+breeds = get_breeds()
 
 selected_id = st.session_state.get("selected_breed_id")
 
