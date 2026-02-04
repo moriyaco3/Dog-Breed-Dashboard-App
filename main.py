@@ -16,10 +16,10 @@ def get_breeds():
 
 def show_gallery(breeds):
     st.title(" Dog Breed Dashboard")
-    st.write("Browse dog breeds and click for details")
+    st.write("## Browse dog breeds and click for details")
 
     # --- search box ---
-    st.markdown("## Search breed by name")
+    st.markdown("#### Search breed by name")
 
     query = st.text_input(
         label="",
@@ -35,7 +35,7 @@ def show_gallery(breeds):
     groups = sorted({b.get("breed_group") for b in breeds if b.get("breed_group")})
     groups = ["All groups"] + groups
 
-    st.markdown("## Filter by breed group")
+    st.markdown("#### Filter by breed group")
 
     selected_group = st.selectbox(
         label="",
