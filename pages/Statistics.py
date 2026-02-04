@@ -286,7 +286,7 @@ df["height_avg_cm"] = df[["h_male_avg_cm", "h_female_avg_cm"]].mean(axis=1)
 
 scatter_df2 = df.dropna(subset=["height_avg_cm", "life_avg"])
 
-fig, ax = plt.subplots(figsize=(6, 4))
+fig, ax = plt.subplots(figsize=(6, 3))
 
 sns.regplot(
     data=scatter_df2,
@@ -361,7 +361,7 @@ stats = (
 )
 
 
-fig, ax = plt.subplots(figsize=(6, 3.5))
+fig, ax = plt.subplots(figsize=(6, 3))
 
 sns.barplot(
     data=stats,
