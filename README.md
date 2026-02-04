@@ -29,3 +29,5 @@ The focus is on making the data easy to understand and useful for real-world dec
 streamlit run main.py
 
 ## Public URL
+
+https://gutxw6urf32qusvcxb8xzd.streamlit.app/
