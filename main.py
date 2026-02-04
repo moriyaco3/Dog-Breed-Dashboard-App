@@ -15,14 +15,36 @@ def get_breeds():
 
 
 def show_gallery(breeds):
-    st.title("🐶 Dog Breed Dashboard")
+    st.title(" Dog Breed Dashboard")
     st.write("Browse dog breeds and click for details")
 
-    # --- NEW: search box ---
-    query = st.text_input("Search breed by name", "").strip().lower()
+    # --- search box ---
+    st.markdown("## Search breed by name")
+
+    query = st.text_input(
+        label="",
+        placeholder="Type a breed name...",
+        label_visibility="collapsed"
+    )
+    query = query.strip().lower()
 
     if query:
         breeds = [b for b in breeds if query in (b.get("name", "").lower())]
+
+    # --- filter by breed group ---
+    groups = sorted({b.get("breed_group") for b in breeds if b.get("breed_group")})
+    groups = ["All groups"] + groups
+
+    st.markdown("## Filter by breed group")
+
+    selected_group = st.selectbox(
+        label="",
+        options=groups,
+        label_visibility="collapsed"
+    )
+
+    if selected_group != "All groups":
+        breeds = [b for b in breeds if b.get("breed_group") == selected_group]
 
     if not breeds:
         st.warning("No breeds found. Try a different search.")
