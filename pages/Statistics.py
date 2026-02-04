@@ -15,7 +15,9 @@ df = pd.DataFrame(data)
 df = df.loc[:, ["name", "breed_group", "life_span", "temperament", "origin", "weight", "height", "image"]]
 sns.set_theme(style="dark")
 
-# How many breeds have in every breed group? #
+##############################
+# Number of Breeds per Group #
+##############################
 
 group_counts = (
     df["breed_group"]
@@ -52,6 +54,9 @@ ax.set_facecolor("none")
 
 st.pyplot(fig, use_container_width=False)
 
+#######################################
+# Average Life Span per Group (years) #
+#######################################
 
 # convert life span to average
 def split_range(text):
@@ -100,7 +105,9 @@ ax.set_facecolor("none")
 
 st.pyplot(fig, use_container_width=False)
 
-# Average Weight per Breed Group – Male vs Female
+###################################################
+# Average Weight per Breed Group – Male vs Female #
+###################################################
 
 def get_metric_weight(w):
     if isinstance(w, dict):
@@ -167,6 +174,11 @@ ax.set_facecolor("none")
 
 st.pyplot(fig, use_container_width=False)
 
+
+######################################
+# Show breeds by a temperament trait #
+######################################
+
 # --- Trait graph ---
 # take all temperament strings
 all_temp = df["temperament"].dropna()
@@ -188,15 +200,19 @@ traits_clean = (
 
 unique_traits = sorted(traits_clean.unique())
 
-trait = st.selectbox("Choose a temperament trait", unique_traits)
-
-# --- Prepare data ---
+st.markdown("## Choose a Temperament Trait")
+trait = st.selectbox(
+    label="",
+    options=unique_traits,
+    label_visibility="collapsed"
+)
+-
 temp = df[["breed_group", "temperament"]].dropna(subset=["breed_group", "temperament"]).copy()
 
-# True/False per breed: does temperament contain the chosen trait?
+# per breed: does temperament contain this trait?
 temp["has_trait"] = temp["temperament"].str.contains(fr"\b{trait}\b", case=False, na=False)
 
-# Group stats: percent of breeds in each group that have the trait
+# percent of breeds in each group that have the trait
 stats = (
     temp.groupby("breed_group")["has_trait"]
         .mean()
@@ -206,7 +222,7 @@ stats = (
         .sort_values("percent", ascending=False)
 )
 
-# --- Plot ---
+
 fig, ax = plt.subplots(figsize=(6, 3.5))
 
 sns.barplot(
